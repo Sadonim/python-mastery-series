@@ -26,8 +26,11 @@ from pdf_text import register_fonts, create_styles, process_inline, wrap_cjk_in_
 class PDFBuilder:
     """콘텐츠 딕셔너리를 PDF로 변환하는 메인 빌더"""
 
-    def __init__(self, output_path):
+    def __init__(self, output_path, volume_num=1, volume_subtitle="Python 입문"):
         self.output_path = output_path
+        self.volume_num = volume_num
+        self.volume_subtitle = volume_subtitle
+        self.volume_label = f"Vol.{volume_num}"
         self.story = []
         self.styles = create_styles()
         self.current_accent = Colors.ACCENT_BLUE
@@ -35,8 +38,13 @@ class PDFBuilder:
         register_fonts()
 
     # ── 표지 ─────────────────────────────────────────────────
-    def add_cover_page(self):
-        self.story.append(_CoverPage())
+    def add_cover_page(self, **kwargs):
+        cover_kwargs = {
+            "volume_num": self.volume_num,
+            "title": self.volume_subtitle,
+        }
+        cover_kwargs.update(kwargs)
+        self.story.append(_CoverPage(**cover_kwargs))
         self.story.append(PageBreak())
 
     def _cover_text(self, text, size, color):
@@ -139,7 +147,7 @@ class PDFBuilder:
             self.output_path, pagesize=PAGE_SIZE,
             topMargin=MARGIN_TOP, bottomMargin=MARGIN_BOTTOM,
             leftMargin=MARGIN_LEFT, rightMargin=MARGIN_RIGHT,
-            title="Python Mastery Series Vol.1 - Python 입문",
+            title=f"Python Mastery Series {self.volume_label} - {self.volume_subtitle}",
             author="Python Mastery Series",
         )
         doc.build(self.story,
@@ -255,10 +263,14 @@ class PDFBuilder:
             "TC", fontName="Korean", fontSize=9.5,
             textColor=Colors.TEXT_PRIMARY, leading=14)
         data = []
+        def _esc(txt):
+            s = str(txt)
+            return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
         if headers:
-            data.append([Paragraph(h, h_sty) for h in headers])
+            data.append([Paragraph(_esc(h), h_sty) for h in headers])
         for row in rows:
-            data.append([Paragraph(str(c), c_sty) for c in row])
+            data.append([Paragraph(_esc(c), c_sty) for c in row])
         if not data:
             return
         n = len(data[0])
@@ -432,7 +444,7 @@ class PDFBuilder:
         canvas_obj.setFillColor(Colors.TEXT_TERTIARY)
         canvas_obj.drawCentredString(
             PAGE_WIDTH / 2, 12 * mm,
-            f"Python Mastery Series Vol.1  |  {page_num}")
+            f"Python Mastery Series {self.volume_label}  |  {page_num}")
 
         # 하단 컬러 스트라이프 (1px)
         canvas_obj.setFillColor(accent)

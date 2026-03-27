@@ -19,6 +19,17 @@ from pdf_styles import (
 class CoverPage(Flowable):
     """표지 페이지 — 상단 컬러 밴드 + 기하학적 장식"""
 
+    def __init__(self, volume_num=1, title="Python 입문",
+                 subtitle="기초부터 탄탄하게, 개발자로서의 첫 걸음",
+                 reader_info="CS/SW 학과 1학년  |  Python 초보자  |  MLOps 지망생",
+                 tech_info="Python 3.12  |  VS Code  |  macOS / Windows"):
+        super().__init__()
+        self.volume_num = volume_num
+        self.title = title
+        self.subtitle = subtitle
+        self.reader_info = reader_info
+        self.tech_info = tech_info
+
     def wrap(self, available_width, available_height):
         return available_width, available_height
 
@@ -52,19 +63,18 @@ class CoverPage(Flowable):
         # ── 밴드 내 볼륨 번호 ──
         c.setFillColor(Colors.TEXT_INVERSE)
         c.setFont("Korean", 60)
-        c.drawString(0, h - 105, "Vol. 1")
+        c.drawString(0, h - 105, f"Vol. {self.volume_num}")
 
         # ── 메인 타이틀 (밴드 아래) ──
         title_y = h - band_h - 55
         c.setFillColor(Colors.TEXT_PRIMARY)
         c.setFont("Korean", 44)
-        c.drawString(0, title_y, "Python 입문")
+        c.drawString(0, title_y, self.title)
 
         # ── 부제 ──
         c.setFillColor(Colors.TEXT_SECONDARY)
         c.setFont("Korean", 16)
-        c.drawString(0, title_y - 35,
-                     "기초부터 탄탄하게, 개발자로서의 첫 걸음")
+        c.drawString(0, title_y - 35, self.subtitle)
 
         # ── 구분선 (악센트 컬러) ──
         c.setStrokeColor(Colors.ACCENT_BLUE)
@@ -75,10 +85,8 @@ class CoverPage(Flowable):
         info_y = title_y - 80
         c.setFillColor(Colors.TEXT_TERTIARY)
         c.setFont("Korean", 11)
-        c.drawString(0, info_y,
-                     "CS/SW 학과 1학년  |  Python 초보자  |  MLOps 지망생")
-        c.drawString(0, info_y - 20,
-                     "Python 3.12  |  VS Code  |  macOS / Windows")
+        c.drawString(0, info_y, self.reader_info)
+        c.drawString(0, info_y - 20, self.tech_info)
 
         # ── 하단 밴드 (얇은) ──
         c.setFillColor(Colors.BG_CHAPTER_HEADER)
