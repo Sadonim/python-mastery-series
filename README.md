@@ -9,10 +9,10 @@ MLOps 엔지니어를 목표로 기초부터 실무까지 단계적으로 학습
 | Volume | Title | Pages | Status |
 |--------|-------|-------|--------|
 | Vol.1 | **Python 입문** — 변수, 함수, 자료구조, 모듈 | ~180p | Done |
-| Vol.2 | **Python 심화** — OOP, 예외처리, 정규표현식, 파일 I/O | ~180p | Planned |
-| Vol.3 | **데이터 분석** — NumPy, Pandas, 시각화, API | ~180p | Planned |
-| Vol.4 | **웹 & 배포** — Flask/FastAPI, Docker, CI/CD | ~180p | Planned |
-| Vol.5 | **ML & MLOps** — Scikit-learn, MLflow, 파이프라인 | ~180p | Planned |
+| Vol.2 | **Python 심화** — OOP, 예외처리, 정규표현식, 파일 I/O | ~180p | Done |
+| Vol.3 | **데이터 분석** — NumPy, Pandas, 시각화, API | ~180p | Done |
+| Vol.4 | **웹 & 배포** — Flask/FastAPI, Docker, CI/CD | ~180p | Done |
+| Vol.5 | **ML & MLOps** — Scikit-learn, MLflow, 파이프라인 | ~180p | Done |
 
 ## PDF Generation
 
@@ -23,7 +23,7 @@ pip install reportlab
 python3 generate.py
 ```
 
-출력: `output/python_mastery_vol1.pdf`
+출력: `output/python_mastery_volN.pdf` (N = 1~5)
 
 ## Design
 
